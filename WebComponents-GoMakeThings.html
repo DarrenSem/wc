@@ -10,11 +10,11 @@
 </head>
 <body>
 
-<greeting-message>🥾</greeting-message>
+<greeting-message check>.🥾.</greeting-message>
 
 <greeting-message>
   <b>
-  👋    
+  <big>.👋 </big>  <small> . </small>    
   </b>
 </greeting-message>
   
@@ -39,15 +39,17 @@ console.log("this.constructor", this, this.id);
 
     console.warn("BEFORE:", children);
 
-    // Render HTML
+    // Render updated HTML
     this.innerHTML =`
 <p>
-  <button>Hi there!</button>
+  <button>${this.hasAttribute("check") ? '✅️' : ''}
+    ${children.trim().length ? children : "Hi there!"}
+  </button>
 </p>
 <div
   class="message"
   aria-live="polite"
->${children}</div>
+>massage</div>
     `;
 
   }

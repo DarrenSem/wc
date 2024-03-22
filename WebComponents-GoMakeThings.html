@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>WebComponents</title>
+  <style>
+  </style>
+<head>
+</head>
+<body>
+
+<greeting-message>🥾</greeting-message>
+
+<greeting-message>
+  <b>
+  👋    
+  </b>
+</greeting-message>
+  
+<script>
+  
+  ( () => {
+let counter = 0;
+  
+// Extend the HTMLElement class to create the web component
+class GreetingMessage extends HTMLElement {
+  // We'll create our web component here
+  
+  id = ++ counter;
+  
+  constructor() {
+    // Always call super first in constructor
+
+    super();
+console.log("this.constructor", this, this.id);
+
+    let children = this.innerHTML;
+
+    console.warn("BEFORE:", children);
+
+    // Render HTML
+    this.innerHTML =`
+<p>
+  <button>Hi there!</button>
+</p>
+<div
+  class="message"
+  aria-live="polite"
+>${children}</div>
+    `;
+
+  }
+
+  connectedCallback() {
+    console.log("CONN: the element is injected into the DOM, or it’s moved or appended elsewhere", this, this.id);
+  }
+
+  disconnectedCallback() {
+    console.log("DISC: the element is removed from the DOM. bye", this, this.id);
+  }
+  
+}
+
+// Define the new web component
+if ('customElements' in window) {
+    customElements.define('greeting-message', GreetingMessage);
+}
+
+} )();
+
+let main = () => {
+  
+let greeting = document.querySelector('greeting-message');
+console.log("ID: ", greeting.id);
+
+// The console logs...
+// "disconnected" <greeting-message></greeting-message>
+// "connected!" <greeting-message></greeting-message>
+1&&document.body.append(greeting);
+1&&document.body.append(greeting); // SAME element!
+
+
+// The console logs...
+// "disconnected" <greeting-message></greeting-message>
+0&&greeting.remove();
+
+console.warn(document.body.innerHTML);
+};
+
+main();
+
+</script>
+  
+  
+</body>
+</html>

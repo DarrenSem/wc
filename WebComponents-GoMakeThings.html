@@ -12,6 +12,9 @@
 
 <greeting-message check>.🥾.</greeting-message>
 
+<greeting-message>=<span slot="emoji">🤡</span>
+Heyo! Mid.=</greeting-message>
+
 <greeting-message>
   <b>
   <big>.👋 </big>  <small> . </small>    
@@ -35,14 +38,20 @@ class GreetingMessage extends HTMLElement {
     super();
 console.log("this.constructor", this, this.id);
 
+    this.root = false ? this : this.attachShadow({mode: 'closed'}); // ShadowRoot, for slots etc. https://cdn.gomakethings.com/products/web-components-pMrR2PKi/web-components.html#slots
+
     let children = this.innerHTML;
 
     console.warn("BEFORE:", children);
 
     // Render updated HTML
-    this.innerHTML =`
+    this.root.innerHTML =`
 <p>
-  <button>${this.hasAttribute("check") ? '✅️' : ''}
+  <button>
+
+<slot name="emoji"></slot><slot>Greetings</slot>
+
+ ... ${this.hasAttribute("check") ? '✅️' : ''}
     ${children.trim().length ? children : "Hi there!"}
   </button>
 </p>
@@ -74,7 +83,11 @@ if ('customElements' in window) {
 let main = () => {
   
 let greeting = document.querySelector('greeting-message');
-console.log("ID: ", greeting.id);
+
+let message = greeting.shadowRoot.querySelector('.message');
+let al = message.getAttribute('aria-live');
+
+console.log("ID: ", greeting.id, greeting, al);
 
 // The console logs...
 // "disconnected" <greeting-message></greeting-message>
@@ -87,7 +100,9 @@ console.log("ID: ", greeting.id);
 // "disconnected" <greeting-message></greeting-message>
 0&&greeting.remove();
 
+// console.warn(document.body.innerHTML);
 console.warn(document.body.innerHTML);
+
 };
 
 main();
